@@ -44,3 +44,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Firebase Service Account keys
+src/lib/*-adminsdk-*.json
+*.json
+!package.json
+!components.json
+!tsconfig.json
+

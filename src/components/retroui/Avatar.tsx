@@ -1,9 +1,13 @@
-import * as React from "react";
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Avatar = ({ className, ref, ...props }: React.ComponentPropsWithRef<typeof BaseAvatar.Root>) => (
+const Avatar = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<typeof BaseAvatar.Root>) => (
   <BaseAvatar.Root
     ref={ref}
     className={cn(
@@ -14,7 +18,11 @@ const Avatar = ({ className, ref, ...props }: React.ComponentPropsWithRef<typeof
   />
 );
 
-const AvatarImage = ({ className, ref, ...props }: React.ComponentPropsWithRef<typeof BaseAvatar.Image>) => (
+const AvatarImage = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<typeof BaseAvatar.Image>) => (
   <BaseAvatar.Image
     ref={ref}
     className={cn("aspect-square h-full w-full", className)}
@@ -22,11 +30,15 @@ const AvatarImage = ({ className, ref, ...props }: React.ComponentPropsWithRef<t
   />
 );
 
-const AvatarFallback = ({ className, ref, ...props }: React.ComponentPropsWithRef<typeof BaseAvatar.Fallback>) => (
+const AvatarFallback = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithRef<typeof BaseAvatar.Fallback>) => (
   <BaseAvatar.Fallback
     ref={ref}
     className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-primary text-primary-foreground",
+      "flex h-full w-full items-center justify-center rounded-full bg-accent text-white",
       className,
     )}
     {...props}

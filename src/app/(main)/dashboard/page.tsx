@@ -1,9 +1,14 @@
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import Link from "next/link";
-import React from "react";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const user = await getCurrentUser();
+
+  if (!user) redirect("/auth/login");
+
   return (
     <div className="flex flex-col md:flex-row gap-4 min-h-full">
       <div className="flex flex-col gap-4 md:w-3/4 py-4 md:pr-4 md:border-r-2 w-full">

@@ -1,62 +1,39 @@
 "use client";
 
 import {
-  AudioWaveform,
-  BadgeCheck,
-  Bell,
-  BookOpen,
-  Bot,
   Cctv,
   ChevronRight,
-  ChevronsUpDown,
-  Command,
-  CreditCard,
-  Folder,
-  Forward,
-  Frame,
-  GalleryVerticalEnd,
   LayoutDashboard,
   LogOut,
-  Map,
-  MoreHorizontal,
-  PieChart,
-  Plus,
-  Settings2,
-  Sparkles,
   SquareActivity,
-  SquareTerminal,
   Thermometer,
-  Trash2,
 } from "lucide-react";
 
 import * as React from "react";
 
+import { Avatar } from "@/components/retroui/Avatar";
+import { Breadcrumb } from "@/components/retroui/Breadcrumb";
+import { Card } from "@/components/retroui/Card";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { app } from "@/lib/firebaseConfig";
+import { getAuth } from "firebase/auth";
 import Link from "next/link";
-import { Breadcrumb } from "@/components/retroui/Breadcrumb";
-import { usePathname } from "next/navigation";
-import { Card } from "@/components/retroui/Card";
+import { usePathname, useRouter } from "next/navigation";
 
 const navMain = [
   {
@@ -81,7 +58,17 @@ const navMain = [
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const router = useRouter();
   const currentPage = pathname?.split("/")[1];
+  const user = getAuth(app).currentUser;
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+    getAuth(app).signOut();
+    router.push("/auth/login");
+  };
 
   const { isMobile } = useSidebar();
 
@@ -129,11 +116,27 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarMenuItem className="cursor-pointer border-t-2 p-4">
+        <Avatar>
+          {user?.photoURL ? (
+            <Avatar.Image src={user?.photoURL} />
+          ) : (
+            <Avatar.Fallback>
+              {user?.displayName?.charAt(0).toUpperCase()}
+            </Avatar.Fallback>
+          )}
+        </Avatar>
+        <p className="font-heading font-bold">{user?.displayName}</p>
+      </SidebarMenuItem>
       <SidebarFooter>
         <SidebarMenuItem>
           <SidebarMenuButton
             className="cursor-pointer text-red-500 data-[state=open]:bg-main data-[state=open]:outline-border data-[state=open]:text-main-foreground"
             tooltip={"Logout"}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogout();
+            }}
           >
             <LogOut className="size-5!" />
             <p className="font-heading font-bold">Logout</p>

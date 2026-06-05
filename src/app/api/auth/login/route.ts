@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   try {
     await authAdmin.verifyIdToken(accessToken);
 
-    const exp = 60 * 5 * 1000;
+    const exp = 60 * 60 * 1000;
 
     const sessionCookie = await authAdmin.createSessionCookie(accessToken, {
       expiresIn: exp,

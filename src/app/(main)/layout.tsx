@@ -34,6 +34,7 @@ import { app } from "@/lib/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "@/lib/useSession";
 
 const navMain = [
   {
@@ -61,6 +62,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const currentPage = pathname?.split("/")[1];
   const user = getAuth(app).currentUser;
+  const session = useSession();
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", {
@@ -76,14 +78,18 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="py-5">
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <Link href="/dashboard" className="flex gap-2 items-center">
-              <span>
-                <SquareActivity className="size-6!" />
-              </span>
-              <span className="font-heading font-bold text-lg">Mouse IoT</span>
-            </Link>
-          </SidebarMenuButton>
+          <Card>
+            <SidebarMenuButton className="bg-accent" asChild>
+              <Link href="/dashboard" className="flex gap-2 items-center">
+                <span>
+                  <SquareActivity className="size-6!" />
+                </span>
+                <span className="font-heading font-bold text-lg">
+                  Mouse IoT
+                </span>
+              </Link>
+            </SidebarMenuButton>
+          </Card>
         </SidebarMenuItem>
       </SidebarHeader>
       <SidebarContent>
@@ -116,17 +122,31 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarMenuItem className="cursor-pointer border-t-2 p-4">
-        <Avatar>
-          {user?.photoURL ? (
-            <Avatar.Image src={user?.photoURL} />
+      <SidebarMenuItem className="flex items-center gap-4 cursor-pointer border-t-2 p-4">
+        <Avatar className="size-8 shrink-0">
+          {session.user?.photoURL ? (
+            <Avatar.Image src={session.user?.photoURL} />
           ) : (
-            <Avatar.Fallback>
-              {user?.displayName?.charAt(0).toUpperCase()}
+            <Avatar.Fallback className="text-xs font-bold bg-accent text-black">
+              {session.user?.displayName?.charAt(0).toUpperCase() ||
+                session.user?.email?.charAt(0).toUpperCase() ||
+                "U"}
             </Avatar.Fallback>
           )}
         </Avatar>
-        <p className="font-heading font-bold">{user?.displayName}</p>
+        <div className="flex flex-col gap-1 min-w-0 group-data-[collapsible=icon]:hidden">
+          <span className="font-heading font-bold text-sm truncate">
+            {session.user?.displayName ||
+              session.user?.email?.split("@")[0] ||
+              "User"}
+          </span>
+          {session.user?.displayName && (
+            <span className="text-xs text-muted-foreground truncate">
+              {session.user?.email}
+            </span>
+          )}
+          <p className="text-gray-500 text-xs font-bold">Admin</p>
+        </div>
       </SidebarMenuItem>
       <SidebarFooter>
         <SidebarMenuItem>
@@ -178,7 +198,7 @@ export default function MainLayout({
             </Breadcrumb>
           </div>
         </header>
-        <Card className="flex flex-1 flex-col gap-4 px-4">{children}</Card>
+        <Card className="flex flex-1 flex-col gap-4">{children}</Card>
       </SidebarInset>
     </SidebarProvider>
   );

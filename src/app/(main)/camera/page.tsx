@@ -35,7 +35,7 @@ export default function CameraPage() {
 
   const toggleLed = (checked: boolean) => {
     setLedStatus(checked);
-    sendCommand("led_intensity", checked ? "255" : "0");
+    sendCommand("led_intensity", checked ? "125" : "0");
     toast.success(`LED turned ${checked ? "on" : "off"}`);
   };
 

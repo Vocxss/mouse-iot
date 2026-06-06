@@ -1,16 +1,11 @@
-import { Camera, cameraUrl } from "@/components/camera";
+import { Camera } from "@/components/camera";
 import { Button } from "@/components/retroui/Button";
 import { Card } from "@/components/retroui/Card";
-import { getCurrentUser } from "@/lib/getCurrentUser";
+import { MonitorCurrentHumid, MonitorCurrentTemp } from "@/components/temp";
 import { Thermometer, WavesVertical } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
-  const user = await getCurrentUser();
-
-  if (!user) redirect("/auth/login");
-
+export default function DashboardPage() {
   return (
     <div className="flex flex-col md:flex-row min-h-full">
       <div className="flex flex-col gap-8 md:w-3/4 py-4 md:border-r-2 w-full">
@@ -50,34 +45,8 @@ export default async function DashboardPage() {
             Environtment Data
           </h2>
           <div className="grid grid-cols-2 gap-4 px-4">
-            <Card className="flex flex-col gap-4 p-4 md:items-start items-center bg-green-400">
-              <h2 className="flex items-center justify-between md:flex-row flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span>
-                    <WavesVertical className="size-5" />
-                  </span>
-                  <p className="text-sm font-bold">Humidity:</p>
-                </div>
-                <p className="text-xs font-bold text-right text-green-900">
-                  Status: Normal
-                </p>
-              </h2>
-              <p className="font-bold text-white">62%</p>
-            </Card>
-            <Card className="flex flex-col gap-4 p-4 md:items-start items-center bg-blue-500">
-              <h2 className="flex items-center justify-between md:flex-row flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span>
-                    <Thermometer className="size-5" />
-                  </span>
-                  <p className="text-sm font-bold">Temperature:</p>
-                </div>
-                <p className="text-xs font-bold text-right text-blue-900">
-                  Status: Normal
-                </p>
-              </h2>
-              <p className="font-bold text-white">62 &deg;C</p>
-            </Card>
+            <MonitorCurrentHumid />
+            <MonitorCurrentTemp />
           </div>
         </div>
       </div>

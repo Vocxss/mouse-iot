@@ -12,17 +12,16 @@ export const MonitorCurrentTemp = () => {
   useEffect(() => {
     const tempRef = ref(db, "/temp");
 
-    if (Number(tempValue) >= 29) {
-      setStatus("Critical");
-    } else if (Number(tempValue) >= 25 && Number(tempValue) <= 29) {
-      setStatus("Warm");
-    } else {
-      setStatus("Cold");
-    }
-
     const unsubscribe = onValue(tempRef, (snapshot) => {
       const data = snapshot.val();
       setTempValue(data);
+      if (data >= 29) {
+        setStatus("Critical");
+      } else if (data >= 25 && data <= 29) {
+        setStatus("Warm");
+      } else {
+        setStatus("Cold");
+      }
     });
     return () => unsubscribe();
   }, []);
@@ -48,7 +47,7 @@ export const MonitorCurrentTemp = () => {
 };
 
 export const MonitorCurrentHumid = () => {
-  const [humidValue, setHumidValue] = useState<string | null>(null);
+  const [humidValue, setHumidValue] = useState<number | null>(null);
   const [status, setStatus] = useState("Normal");
 
   useEffect(() => {
@@ -57,15 +56,15 @@ export const MonitorCurrentHumid = () => {
     const unsubscribe = onValue(humidRef, (snapshot) => {
       const data = snapshot.val();
       setHumidValue(data);
-    });
 
-    if (Number(humidValue) >= 60) {
-      setStatus("Humid");
-    } else if (Number(humidValue) <= 40) {
-      setStatus("Dry");
-    } else {
-      setStatus("Normal");
-    }
+      if (data >= 60) {
+        setStatus("Humid");
+      } else if (data <= 40) {
+        setStatus("Dry");
+      } else {
+        setStatus("Normal");
+      }
+    });
 
     return () => unsubscribe();
   }, []);

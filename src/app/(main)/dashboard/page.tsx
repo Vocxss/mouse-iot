@@ -1,9 +1,8 @@
+import Link from "next/link";
 import { Camera } from "@/components/camera";
 import { Button } from "@/components/retroui/Button";
-import { Card } from "@/components/retroui/Card";
+import { DeviceStatusSection } from "@/components/status";
 import { MonitorCurrentHumid, MonitorCurrentTemp } from "@/components/temp";
-import { Thermometer, WavesVertical } from "lucide-react";
-import Link from "next/link";
 
 export default function DashboardPage() {
   return (
@@ -14,30 +13,7 @@ export default function DashboardPage() {
             Device Status
           </h2>
           <div className="grid md:grid-cols-3 grid-cols-1 gap-4 px-4">
-            <Card className="flex flex-col gap-2 font-bold p-4 bg-cyan-400">
-              <h1 className="text-sm">
-                ESP32-Wroom:{" "}
-                <span className="font-bold text-white text-base">
-                  Connected
-                </span>
-              </h1>
-            </Card>
-            <Card className="flex flex-col gap-2 font-bold p-4 bg-red-400">
-              <h1 className="text-sm">
-                ESP32-Cam:{" "}
-                <span className="font-bold text-white text-base">
-                  Connected
-                </span>
-              </h1>
-            </Card>
-            <Card className="flex flex-col gap-2 font-bold p-4 bg-amber-400">
-              <h1 className="text-sm">
-                Firebase:{" "}
-                <span className="font-bold text-white text-base">
-                  Connected
-                </span>
-              </h1>
-            </Card>
+            <DeviceStatusSection />
           </div>
         </div>
         <div className="flex flex-col gap-4 ">

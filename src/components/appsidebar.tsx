@@ -27,25 +27,26 @@ import {
   SidebarRail,
   useSidebar,
 } from "./ui/sidebar";
+import { useEffect } from "react";
 
 const navMain = [
   {
     title: "Dashboard",
     url: "dashboard",
     icon: <LayoutDashboard className="size-5!" />,
-    isActive: true,
+    isActive: false,
   },
   {
     title: "Camera",
     url: "camera",
     icon: <Cctv className="size-5!" />,
-    isActive: true,
+    isActive: false,
   },
   {
     title: "Temperature",
     url: "temp",
     icon: <Thermometer className="size-5!" />,
-    isActive: true,
+    isActive: false,
   },
 ];
 
@@ -86,17 +87,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupLabel>Pages</SidebarGroupLabel>
           <SidebarMenu>
             {navMain.map((item) => {
-              const isActive =
-                currentPage?.toLowerCase() === item.url.toLowerCase();
+              const isActive = pathname.split("/")[1] === item.url;
               return (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
                     isActive={isActive}
-                    className="data-[state=open]:bg-main data-[state=open]:outline-border data-[state=open]:text-main-foreground"
+                    className="data-[state=open]:bg-main data-[state=open]:outline-border data-[state=open]:text-main-foreground data-[active=true]:outline-border data-[active=true]:bg-accent"
                     tooltip={item.title}
                   >
                     <NextLink
